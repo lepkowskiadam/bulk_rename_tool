@@ -9,3 +9,7 @@ class Snapshot:
 
     def return_state(self):
         return self.states[self.state]
+
+    def undo(self):
+        if self.state > 0:
+            self.state -= 1
