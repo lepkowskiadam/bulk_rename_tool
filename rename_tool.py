@@ -22,3 +22,8 @@ class RenameTool:
         self.snapshot.undo()
         path, new_pattern, old_pattern = self.snapshot.return_state()
         return self.rename(path, old_pattern, new_pattern)
+
+    def redo(self):
+        self.snapshot.redo()
+        path, new_pattern, old_pattern = self.snapshot.return_state()
+        return self.rename(path, old_pattern, new_pattern)
