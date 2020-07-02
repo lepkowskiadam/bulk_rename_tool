@@ -13,3 +13,7 @@ class Snapshot:
     def undo(self):
         if self.state > 0:
             self.state -= 1
+
+    def redo(self):
+        if self.state < len(self.states) - 1:
+            self.state += 1
