@@ -20,3 +20,13 @@ def test_undo(rename, temp_files, tmp_path):
     result = rename.undo()
     expected = [f'{pattern}{i}.txt' for i in range(10)]
     assert sorted(result) == sorted(expected)
+
+
+def test_redo(rename, temp_files, tmp_path):
+    pattern = 'my_file'
+    new_pattern = 'test_file'
+    rename.rename(tmp_path, pattern, new_pattern)
+    rename.undo()
+    result = rename.redo()
+    expected = [f'{new_pattern}{i}.txt' for i in range(10)]
+    assert sorted(result) == sorted(expected)
