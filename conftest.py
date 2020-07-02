@@ -17,8 +17,8 @@ def matcher():
 
 
 @pytest.fixture(name='rename')
-def rename(matcher):
-    rename_tool = RenameTool(matcher)
+def rename():
+    rename_tool = RenameTool()
     return rename_tool
 
 
