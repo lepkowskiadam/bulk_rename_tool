@@ -1,10 +1,11 @@
 from snapshot import Snapshot
+from matcher import Matcher
 import os
 
 
 class RenameTool:
-    def __init__(self, matcher):
-        self.matcher = matcher
+    def __init__(self):
+        self.matcher = Matcher()
         self.snapshot = Snapshot()
 
     def rename(self, path, pattern, new_pattern):
