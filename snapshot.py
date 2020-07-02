@@ -5,3 +5,4 @@ class Snapshot:
 
     def save_state(self, path, pattern, new_pattern):
         self.states.append((path, pattern, new_pattern))
+        self._i += 1
