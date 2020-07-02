@@ -1,6 +1,13 @@
 from rename_tool import RenameTool
 from matcher import Matcher
+from snapshot import Snapshot
 import pytest
+
+
+@pytest.fixture(name='snapshot')
+def snapshot():
+    snapshot = Snapshot()
+    return snapshot
 
 
 @pytest.fixture(name='matcher')
