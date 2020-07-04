@@ -9,15 +9,14 @@ class RenameTool:
         self.snapshot = Snapshot()
 
     def rename(self, path, pattern, new_pattern):
-        if os.path.exists(path):
-            to_update = self.matcher.match(path, pattern)
-            updated = []
-            for file in to_update:
-                new = file.replace(pattern, new_pattern)
-                updated.append(new)
-                os.rename(dst=os.path.join(path, new), src=os.path.join(path, file))
-            self.snapshot.save_state(path, pattern, new_pattern)
-            return updated
+        to_update = self.matcher.match(path, pattern)
+        updated = []
+        for file in to_update:
+            new = file.replace(pattern, new_pattern)
+            updated.append(new)
+            os.rename(dst=os.path.join(path, new), src=os.path.join(path, file))
+        self.snapshot.save_state(path, pattern, new_pattern)
+        return updated
 
     def undo(self):
         self.snapshot.undo()
