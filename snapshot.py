@@ -5,7 +5,7 @@ class Snapshot:
 
     def save_state(self, path, pattern, new_pattern):
         if self.state != len(self.states) - 1:
-            self.states = self.states[self.state + 1]
+            self.states = self.states[:self.state + 1]
         self.states.append((path, pattern, new_pattern))
         self.state += 1
 
