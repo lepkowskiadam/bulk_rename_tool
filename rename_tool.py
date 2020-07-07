@@ -12,7 +12,8 @@ class RenameTool:
         to_update = self.matcher.match(path, pattern)
         updated = []
         for file in to_update:
-            new = file.replace(pattern, new_pattern)
+            ext = '.' + file.rsplit('.')[-1]
+            new = file.replace(pattern, new_pattern)[:-len(ext)] + ext
             updated.append(new)
             os.rename(dst=os.path.join(path, new), src=os.path.join(path, file))
         self.snapshot.save_state(path, pattern, new_pattern)
