@@ -36,3 +36,12 @@ class UserMessage:
         print('Enter "q" to quit')
         command = input('Available options: rename/undo/redo: ')
         return command.lower()
+
+    @staticmethod
+    def display_changes(changes_list):
+        for old, new in changes_list:
+            print(f'{old} ---> {new}')
+        command = input('Do you wish to proceed with the changes? ')
+        if command.lower() == 'y':
+            return True
+        return False

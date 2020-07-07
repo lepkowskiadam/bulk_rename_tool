@@ -28,3 +28,12 @@ class RenameTool:
         self.snapshot.redo()
         path, new_pattern, old_pattern = self.snapshot.return_state()
         return self.rename(path, old_pattern, new_pattern)
+
+    def display_changes(self, path, pattern, new_pattern):
+        to_update = self.matcher.match(path, pattern)
+        updated = []
+        for file in to_update:
+            ext = '.' + file.rsplit('.')[-1]
+            new = file.replace(pattern, new_pattern)[:-len(ext)] + ext
+            updated.append(new)
+        return zip(to_update, updated)

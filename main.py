@@ -11,7 +11,9 @@ def main():
         if command.lower() == 'rename':
             try:
                 path, pattern, new_pattern = msg.rename()
-                rename_tool.rename(path, pattern, new_pattern)
+                changes_list = rename_tool.display_changes(path, pattern, new_pattern)
+                if msg.display_changes(changes_list):
+                    rename_tool.rename(path, pattern, new_pattern)
             except TypeError:
                 pass
         else:
