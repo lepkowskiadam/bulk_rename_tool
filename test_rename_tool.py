@@ -33,3 +33,13 @@ def test_redo(rename, temp_files, tmp_path):
 def test_rename(rename, temp_files, tmp_path, pattern, new_pattern, expected):
     result = rename.rename(tmp_path, pattern, new_pattern)
     assert sorted(result) == sorted(expected)
+
+
+@pytest.mark.parametrize('pattern, new_pattern, expected', [
+    ('file', 'new_file', [f'new_file_{i}.txt' for i in range(10)]),
+    ('pattern_not_used', 'test', [])
+])
+def test_rename_full(rename, temp_files, tmp_path, pattern, new_pattern, expected):
+    result = rename.rename_full(tmp_path, pattern, new_pattern)
+    assert sorted(result) == sorted(expected)
+    rename.rename_full(tmp_path, pattern, new_pattern)
