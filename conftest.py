@@ -28,3 +28,11 @@ def temp_files(tmp_path):
     for i in range(10):
         p = d / f'my_file{i}.txt'
         p.write_text(f'{i}')
+
+
+@pytest.fixture(name='multiple_patts')
+def multiple_patts(tmp_path):
+    d = tmp_path
+    for i in range(10):
+        p = d / f'file_ąśę{i}.txt'
+        p.write_text(f'{i}')
