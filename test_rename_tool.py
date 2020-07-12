@@ -42,4 +42,11 @@ def test_rename(rename, temp_files, tmp_path, pattern, new_pattern, expected):
 def test_rename_full(rename, temp_files, tmp_path, pattern, new_pattern, expected):
     result = rename.rename_full(tmp_path, pattern, new_pattern)
     assert sorted(result) == sorted(expected)
-    rename.rename_full(tmp_path, pattern, new_pattern)
+
+
+@pytest.mark.parametrize('patterns, expected', [
+    ({'ś': 's', 'ą': 'a', 'ę': 'e'}, [f'file_ase{i}.txt' for i in range(10)]),
+])
+def test_rename_multiple_patterns(rename, tmp_path, patterns, expected, multiple_patts):
+    result = rename.rename_multiple(tmp_path, patterns)
+    assert sorted(result) == sorted(expected)
