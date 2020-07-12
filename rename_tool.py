@@ -48,3 +48,16 @@ class RenameTool:
             os.rename(dst=os.path.join(path, new), src=os.path.join(path, file))
         self.snapshot.save_state(path, pattern, new_pattern, 'rename_full')
         return updated
+
+    def rename_multiple(self, path, patterns: dict):
+        to_update = self.matcher.match_multiple(path, patterns)
+        updated = []
+        for file, hits in to_update:
+            ext = '.' + file.rsplit('.')[-1]
+            new_file = file
+            for hit in hits:
+                new_file = new_file.replace(hit, patterns[hit])
+            new_file = new_file[:-len(ext)] + ext
+            updated.append(new_file)
+            os.rename(dst=os.path.join(path, new_file), src=os.path.join(path, file))
+        return updated
