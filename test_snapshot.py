@@ -2,76 +2,56 @@ from snapshot import Snapshot
 import pytest
 
 
+@pytest.fixture
+def path_file_names():
+    path = 'test/path'
+    old_file_names = [f'old_file_1{x}.txt' for x in range(10)]
+    new_file_names = [f'new_file_1{x}.txt' for x in range(10)]
+    return path, old_file_names, new_file_names
+
+
 def test_init(snapshot):
     assert snapshot
 
 
-def test_save_state(snapshot):
-    snapshot.save_state('test/path', 'test_pattern', 'test_new_pattern', 'test')
+def test_save_state(snapshot, path_file_names):
+    path, old_file_names, new_file_names = path_file_names
+    snapshot.save_state(path, old_file_names, new_file_names)
     assert len(snapshot.states) == 1
+    assert snapshot.state == 0
 
 
-def test_return_state(snapshot):
-    snapshot.save_state('test/path', 'test_pattern', 'test_new_pattern', 'test')
+def test_return_state(snapshot, path_file_names):
+    path, old_file_names, new_file_names = path_file_names
+    snapshot.save_state(path, old_file_names, new_file_names)
     result = snapshot.return_state()
     assert type(result) == tuple
-    assert len(result) == 4
+    assert len(result) == 3
+    assert result[1] == old_file_names
+    assert result[2] == new_file_names
 
 
-def test_undo(snapshot):
-    test_path_1 = 'test/path'
-    test_pattern_1 = 'test_pattern'
-    test_new_pattern_1 = 'test_new_pattern'
-    func = 'test'
-    test_path_2 = 'test/path'
-    test_pattern_2 = 'test_pattern_2'
-    test_new_pattern_2 = 'test_new_pattern_2'
-    snapshot.save_state(test_path_1, test_pattern_1, test_new_pattern_1, func)
-    snapshot.save_state(test_path_2, test_pattern_2, test_new_pattern_2, func)
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_2
-    assert old == test_pattern_2
-    assert new == test_new_pattern_2
+def test_undo(snapshot, path_file_names):
+    path, old_file_names, new_file_names = path_file_names
+    snapshot.save_state(path, old_file_names, new_file_names)
+    assert snapshot.state == 0
     snapshot.undo()
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_1
-    assert old == test_pattern_1
-    assert new == test_new_pattern_1
+    assert snapshot.state == 0
+    snapshot.save_state(path, old_file_names, new_file_names)
+    assert snapshot.state == 1
     snapshot.undo()
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_1
-    assert old == test_pattern_1
-    assert new == test_new_pattern_1
+    assert snapshot.state == 0
 
 
-def test_redo(snapshot):
-    test_path_1 = 'test/path'
-    test_pattern_1 = 'test_pattern'
-    test_new_pattern_1 = 'test_new_pattern'
-    func = 'test'
-    test_path_2 = 'test/path'
-    test_pattern_2 = 'test_pattern_2'
-    test_new_pattern_2 = 'test_new_pattern_2'
-    snapshot.save_state(test_path_1, test_pattern_1, test_new_pattern_1, func)
-    snapshot.save_state(test_path_2, test_pattern_2, test_new_pattern_2, func)
-    snapshot.undo()
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_1
-    assert old == test_pattern_1
-    assert new == test_new_pattern_1
+def test_redo(snapshot, path_file_names):
+    path, old_file_names, new_file_names = path_file_names
+    snapshot.save_state(path, old_file_names, new_file_names)
+    assert snapshot.state == 0
     snapshot.redo()
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_2
-    assert old == test_pattern_2
-    assert new == test_new_pattern_2
+    assert snapshot.state == 0
+    snapshot.save_state(path, old_file_names, new_file_names)
+    assert snapshot.state == 1
+    snapshot.undo()
+    assert snapshot.state == 0
     snapshot.redo()
-    result = snapshot.return_state()
-    path, old, new, func = result
-    assert path == test_path_2
-    assert old == test_pattern_2
-    assert new == test_new_pattern_2
+    assert snapshot.state == 1
