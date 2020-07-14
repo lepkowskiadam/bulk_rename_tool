@@ -3,10 +3,10 @@ class Snapshot:
         self.states = []
         self.state = -1
 
-    def save_state(self, path, pattern, new_pattern, func):
+    def save_state(self, path, old_file_names: list, new_file_names: list):
         if self.state != len(self.states) - 1:
             self.states = self.states[:self.state + 1]
-        self.states.append((path, pattern, new_pattern, func))
+        self.states.append((path, old_file_names, new_file_names))
         self.state += 1
 
     def return_state(self):
