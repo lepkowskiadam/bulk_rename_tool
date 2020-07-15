@@ -15,11 +15,11 @@ class Matcher:
         return matches
 
     @staticmethod
-    def match_multiple(path, patterns: dict):
+    def match_multiple(path, **kwargs):
         matches = []
         for file in os.listdir(path):
             hits = []
-            for pattern in patterns:
+            for pattern in kwargs:
                 search_pattern = re.compile(r'{}'.format(pattern))
                 mo = search_pattern.search(file)
                 if mo is not None:
