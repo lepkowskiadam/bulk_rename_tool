@@ -14,6 +14,12 @@ def main():
                 rename_tool.replace(path, **patterns)
             except TypeError:
                 pass
+        elif command.lower() == 'rename':
+            try:
+                path, pattern, new_pattern = msg.rename()
+                rename_tool.rename(path, pattern, new_pattern)
+            except TypeError:
+                pass
         else:
             try:
                 if getattr(msg, command)():
