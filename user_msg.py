@@ -42,7 +42,7 @@ class UserMessage:
     @staticmethod
     def prompt():
         print('Enter "q" to quit')
-        command = input('Available options: replace/undo/redo: ')
+        command = input('Available options: replace/rename/undo/redo: ')
         return command.lower()
 
     @staticmethod
@@ -53,3 +53,13 @@ class UserMessage:
         if command.lower() == 'y':
             return True
         return False
+
+    @staticmethod
+    def rename():
+        path = input('Enter directory path: ')
+        if os.path.exists(path):
+            pattern = input('Enter pattern to be replaced: ')
+            new_pattern = input('Enter new pattern: ')
+            return path, pattern, new_pattern
+        else:
+            print('Path does not exist')
