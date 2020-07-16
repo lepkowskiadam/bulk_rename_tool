@@ -9,8 +9,11 @@ def main():
     while command != 'q':
         command = msg.prompt()
         if command.lower() == 'replace':
-            path, patterns = msg.replace()
-            rename_tool.replace(path, **patterns)
+            try:
+                path, patterns = msg.replace()
+                rename_tool.replace(path, **patterns)
+            except TypeError:
+                pass
         else:
             try:
                 if getattr(msg, command)():
