@@ -7,25 +7,19 @@ def main():
     msg = UserMessage()
     command = ''
     while command != 'q':
-        command = msg.prompt()
-        if command.lower() == 'replace':
-            try:
-                path, patterns = msg.replace()
-                rename_tool.replace(path, **patterns)
-            except TypeError:
-                pass
-        elif command.lower() == 'rename':
-            try:
-                path, pattern, new_pattern = msg.rename()
-                rename_tool.rename(path, pattern, new_pattern)
-            except TypeError:
-                pass
-        else:
-            try:
+        command = msg.prompt().lower()
+        if hasattr(rename_tool, command):
+            if command == 'rename' or command == 'replace':
+                try:
+                    path, patterns = getattr(msg, command)()
+                    getattr(rename_tool, command)(path, **patterns)
+                except TypeError:
+                    pass
+            else:
                 if getattr(msg, command)():
                     getattr(rename_tool, command)()
-            except AttributeError:
-                msg.command_not_found(command)
+        else:
+            msg.command_not_found(command)
 
 
 if __name__ == '__main__':
