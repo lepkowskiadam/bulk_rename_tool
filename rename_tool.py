@@ -26,16 +26,19 @@ class RenameTool:
 
     def undo(self):
         self.snapshot.undo()
-        path, new_file_names, old_file_names = self.snapshot.return_state()
-        for new, old in zip(new_file_names, old_file_names):
-            os.rename(dst=os.path.join(path, new), src=os.path.join(path, old))
+        if self.snapshot.state == 0:
+            path, new_file_names, old_file_names = self.snapshot.return_state()
+        else:
+            path, old_file_names, new_file_names = self.snapshot.return_state()
+        for old, new in zip(old_file_names, new_file_names):
+            os.rename(src=os.path.join(path, old), dst=os.path.join(path, new))
         return new_file_names
 
     def redo(self):
         self.snapshot.redo()
         path, old_file_names, new_file_names = self.snapshot.return_state()
-        for new, old in zip(new_file_names, old_file_names):
-            os.rename(dst=os.path.join(path, new), src=os.path.join(path, old))
+        for old, new in zip(old_file_names, new_file_names):
+            os.rename(src=os.path.join(path, old), dst=os.path.join(path, new))
         return new_file_names
 
     def rename(self, path, **kwargs):
