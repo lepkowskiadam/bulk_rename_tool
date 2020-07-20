@@ -9,7 +9,7 @@ class RenameTool:
         self.snapshot = Snapshot()
 
     def replace(self, path, **kwargs):
-        matches = self.matcher.match_multiple(path, **kwargs)
+        matches = self.matcher.match(path, **kwargs)
         old_file_names = []
         new_file_names = []
         for file, hits in matches:
@@ -38,22 +38,16 @@ class RenameTool:
             os.rename(dst=os.path.join(path, new), src=os.path.join(path, old))
         return new_file_names
 
-    def display_changes(self, path, pattern, new_pattern):
-        old_file_names = self.matcher.match(path, pattern)
+    def rename(self, path, **kwargs):
+        matches = self.matcher.match(path, **kwargs)
+        old_file_names = []
         new_file_names = []
-        for file in old_file_names:
-            ext = '.' + file.rsplit('.')[-1]
-            new = file.replace(pattern, new_pattern)[:-len(ext)] + ext
-            new_file_names.append(new)
-        return zip(old_file_names, new_file_names)
-
-    def rename(self, path, pattern, new_pattern):
-        old_file_names = self.matcher.match(path, pattern)
-        new_file_names = []
-        for num, file in enumerate(old_file_names):
-            ext = '.' + file.rsplit('.')[-1]
-            new = new_pattern + f'_{num}' + ext
-            new_file_names.append(new)
-            os.rename(dst=os.path.join(path, new), src=os.path.join(path, file))
+        for num, file in enumerate(matches):
+            if file[1]:
+                ext = '.' + file[0].rsplit('.')[-1]
+                new = kwargs[file[1][0]] + f'_{num}' + ext
+                old_file_names.append(file[0])
+                new_file_names.append(new)
+                os.rename(dst=os.path.join(path, new), src=os.path.join(path, file[0]))
         self.snapshot.save_state(path, old_file_names, new_file_names)
         return new_file_names
