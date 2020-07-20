@@ -18,7 +18,6 @@ class UserMessage:
                 return path, old_new
             else:
                 print('The number of patterns don\'t match')
-        print('Path does not exist')
 
     @staticmethod
     def undo():
@@ -46,15 +45,6 @@ class UserMessage:
         return command.lower()
 
     @staticmethod
-    def display_changes(changes_list):
-        for old, new in changes_list.items():
-            print(f'{old} ---> {new}')
-        command = input('Do you wish to proceed with the changes? ')
-        if command.lower() == 'y':
-            return True
-        return False
-
-    @staticmethod
     def rename():
         path = input('Enter directory path: ')
         if os.path.exists(path):
@@ -62,5 +52,3 @@ class UserMessage:
             new_pattern = input('Enter new pattern: ')
             patterns = {pattern: new_pattern}
             return path, patterns
-        else:
-            print('Path does not exist')
