@@ -7,14 +7,14 @@ def main():
     msg = UserMessage()
     command = ''
     while command != 'q':
-        command = msg.prompt().lower()
+        command = msg.prompt()
         if hasattr(rename_tool, command):
             if command == 'rename' or command == 'replace':
                 try:
                     path, patterns = getattr(msg, command)()
                     getattr(rename_tool, command)(path, **patterns)
                 except TypeError:
-                    pass
+                    print('Path does not exist')
             else:
                 if getattr(msg, command)():
                     getattr(rename_tool, command)()
