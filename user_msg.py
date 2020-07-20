@@ -47,7 +47,7 @@ class UserMessage:
 
     @staticmethod
     def display_changes(changes_list):
-        for old, new in changes_list:
+        for old, new in changes_list.items():
             print(f'{old} ---> {new}')
         command = input('Do you wish to proceed with the changes? ')
         if command.lower() == 'y':
@@ -60,6 +60,7 @@ class UserMessage:
         if os.path.exists(path):
             pattern = input('Enter pattern to be replaced: ')
             new_pattern = input('Enter new pattern: ')
-            return path, pattern, new_pattern
+            patterns = {pattern: new_pattern}
+            return path, patterns
         else:
             print('Path does not exist')
